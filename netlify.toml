@@ -1,12 +1,56 @@
-[images]
-  remote_images = ["https://source.unsplash.com/.*", "https://images.unsplash.com/.*", "https://ext.same-assets.com/.*", "https://ugc.same-assets.com/.*"]
+# ============================
+# ⚙️ Configuration principale
+# ============================
 
 [build]
-  command = "bun run build"
+  command = "npm run build"
   publish = ".next"
+  functions = "netlify/functions"
 
-[build.environment]
-  NETLIFY_NEXT_PLUGIN_SKIP = "true"
-
+# ===================================
+# 🔌 Plugin officiel Next.js + SSR
+# ===================================
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# ===================================
+# 📸 Images distantes autorisées
+# (utile si tu charges des images externes)
+# ===================================
+[images]
+  remote_patterns = [
+    { protocol = "https", hostname = "res.cloudinary.com" },
+    { protocol = "https", hostname = "images.unsplash.com" },
+    { protocol = "https", hostname = "cdn.pixabay.com" },
+    { protocol = "https", hostname = "ext.same-assets.com" },
+    { protocol = "https", hostname = "pegg-site.netlify.app" }
+  ]
+
+# ===================================
+# ⚡ Optimisations de performance
+# ===================================
+[build.environment]
+  NODE_VERSION = "20"
+  NEXT_TELEMETRY_DISABLED = "1"
+  CI = "false"
+
+# ===================================
+# 📫 Gestion des formulaires Netlify
+# ===================================
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "upgrade-insecure-requests"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ===================================
+# 🚀 Redirections automatiques (si besoin)
+# ===================================
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

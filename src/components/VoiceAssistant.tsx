@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { MessageCircle } from "lucide-react";
 
 declare global {
@@ -13,7 +13,9 @@ declare global {
 
 export default function VoiceAssistant() {
   useEffect(() => {
-    // Éviter de charger le script plusieurs fois
+    if (typeof document === "undefined") return;
+
+    // Évite de charger le script plusieurs fois
     if (document.getElementById("tawk-script")) return;
 
     const script = document.createElement("script");

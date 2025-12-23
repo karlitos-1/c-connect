@@ -1,19 +1,23 @@
 "use client";
 
-import { MessageCircle } from "lucide-react";
 import React, { useEffect } from "react";
+import { MessageCircle } from "lucide-react";
 
 export default function VoiceAssistant() {
   useEffect(() => {
-    // Load the VAPI widget script
+    // Charger le script de Tawk.to
     const script = document.createElement("script");
-    script.src =
-      "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-    script.defer = true;
-    document.body.appendChild(script);
+    script.src = "https://embed.tawk.to/694a7323d49119197b53b520/1jd5d3gmm";
+    script.async = true;
+    script.charset = "UTF-8";
+    script.setAttribute("crossorigin", "*");
+    
+    const firstScript = document.getElementsByTagName("script")[0];
+    firstScript.parentNode.insertBefore(script, firstScript);
 
     return () => {
-      if (document.body.contains(script)) {
+      // Nettoyer le script Tawk.to si le composant est démonté
+      if (script && document.body.contains(script)) {
         document.body.removeChild(script);
       }
     };
@@ -21,24 +25,7 @@ export default function VoiceAssistant() {
 
   return (
     <>
-      {React.createElement("vapi-widget", {
-        "assistant-id": "70603f51-b394-4220-b268-d406f6e5b8bc",
-        "public-key": "3f316145-e21e-4681-9bf0-7479538e1e33",
-        mode: "hybrid",
-        "voice-show-transcript": "true",
-        theme: "light",
-        size: "compact",
-        "accent-color": "#FFD400",
-        "button-base-color": "#0B0B0B",
-        "button-accent-color": "#FFFFFF",
-        "main-label": "Parlez avec C-CONNECT",
-        "start-button-text": "Démarrer",
-        "end-button-text": "Terminer l'appel",
-        "cta-title": "Talk with Us",
-        title: "Talk with Us",
-      })}
-
-      {/* Fallback button in case VAPI doesn't load */}
+      {/* Fallback button in case Tawk.to doesn't load */}
       <div className="fixed bottom-6 right-6 z-50">
         <button className="bg-[#0B0B0B] text-white px-4 py-3 rounded-2xl shadow-xl hover:scale-105 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex items-center gap-2">
           <MessageCircle className="w-5 h-5" />
